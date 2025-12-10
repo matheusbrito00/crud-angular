@@ -1,0 +1,24 @@
+mat-card {
+  margin: 38px auto;
+  max-width: 80%;
+  text-align: end;
+}
+
+.toolbar {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.min-width {
+  width: 100%;
+  min-width: 150px;
+}
+
+.mat-mdc-raised-button {
+  background-color: #435035;
+}

@@ -1,0 +1,20 @@
+@use '@angular/material' as mat;
+
+html, body {
+  height: 100%;
+}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+:root {
+  @include mat.toolbar-overrides((
+    container-background-color: #435035,
+    container-text-color: white,
+  ));
+
+  @include mat.fab-overrides((
+    small-foreground-color: #79CF23,
+    small-container-color: #435035
+  ));
+}

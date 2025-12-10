@@ -1,0 +1,30 @@
+<mat-card>
+  <mat-toolbar class="toolbar" color="primary">
+    Criar Curso
+  </mat-toolbar>
+
+  <mat-card-content>
+
+    <form [formGroup]="form" class="min-width">
+      <mat-form-field appearance="outline" class="full-width">
+        <input matInput placeholder="Informe o nome do curso" formControlName="name">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Seleciona a categoria do curso</mat-label>
+        <mat-select formControlName="category">
+          <mat-option value="null"></mat-option>
+          <mat-option value="FRONT-END">Front-End</mat-option>
+          <mat-option value="BACK-END">Back-End</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button type="button" mat-raised-button style="background-color: #435035; color: #79CF23; margin-right: 10px;"
+      (click)="onSubmit()">Salvar</button>
+    <button type="button" mat-raised-button style="color: #79CF23;" (click)="onCancel()">Cancelar</button>
+  </mat-card-actions>
+</mat-card>
