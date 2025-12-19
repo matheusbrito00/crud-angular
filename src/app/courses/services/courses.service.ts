@@ -15,12 +15,35 @@ export class CoursesService {
   getCourses(): Observable<Course[]> {
     return this.http.get<Course[]>(this.API).pipe(
       first(),
-      delay(1500),
-      tap((courses) => console.log(courses))
+      // delay(1500),
     );
   }
 
-  save(course: Partial<Course>): Observable<Course> {
+  getCourseById(id: string): Observable<Course> {
+    return this.http.get<Course>(`${this.API}/${id}`);
+  }
+
+  save(course: Partial<Course>) {
+    if (course._id) {
+      return this.update(course);
+    } else {
+      return this.create(course);
+    }
+  }
+
+  delete(id: string): Observable<void> {
+    return this.http
+      .delete<void>(`${this.API}/${id}`)
+      .pipe(first());
+  }
+
+  private create(course: Partial<Course>): Observable<Course> {
     return this.http.post<Course>(this.API, course).pipe(first());
+  }
+
+  private update(course: Partial<Course>): Observable<Course> {
+    return this.http
+      .put<Course>(`${this.API}/${course._id}`, course)
+      .pipe(first());
   }
 }

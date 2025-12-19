@@ -8,8 +8,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { ActivatedRoute } from '@angular/router';
 
-import { CoursesService } from '../services/courses.service';
+import { CoursesService } from '../../services/courses.service';
 
 @Component({
   selector: 'app-course-form',
@@ -33,20 +34,23 @@ export class CourseFormComponent implements OnInit {
     private fb: FormBuilder,
     private courseService: CoursesService,
     private snackBar: MatSnackBar,
-    private location: Location
+    private location: Location,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    const { _id, name, category } = this.route.snapshot.data['course'];
+
     this.form = this.fb.group({
-      name: [''],
-      category: [''],
+      _id: [_id],
+      name: [name],
+      category: [category],
     });
   }
 
   onSubmit() {
     this.courseService.save(this.form.value).subscribe(
       (result) => {
-        console.log(result);
         this.onSuccess();
       },
       (error) => {

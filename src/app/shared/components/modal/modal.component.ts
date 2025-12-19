@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -12,6 +13,7 @@ import {
 @Component({
   selector: 'app-modal',
   imports: [
+    CommonModule,
     MatDialogModule,
     MatDialogTitle,
     MatDialogContent,
@@ -24,5 +26,5 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ModalComponent {
-  data = inject(MAT_DIALOG_DATA);
+  readonly data = inject(MAT_DIALOG_DATA);
 }

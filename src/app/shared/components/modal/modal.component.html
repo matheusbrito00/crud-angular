@@ -1,7 +1,22 @@
-<h2 mat-dialog-title style="color: red;">{{data.title}}</h2>
+<h2 mat-dialog-title style="color: red">{{ data.title }}</h2>
 <mat-dialog-content>
-  {{data.content}}
+  {{ data.content }}
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-flat-button mat-dialog-close type="button" style="background-color: red;">Fechar</button>
+  <button
+    mat-flat-button
+    [mat-dialog-close]="false"
+    type="button"
+    style="background-color: red"
+  >
+    Fechar
+  </button>
+  <button
+    mat-flat-button
+    [mat-dialog-close]="true"
+    type="button"
+    *ngIf="data.action"
+  >
+    {{ data.action }}
+  </button>
 </mat-dialog-actions>

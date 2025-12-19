@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,11 +14,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
 
-import { CategoryPipe } from '../../shared/pipes/category.pipe';
-import { Course } from '../model/course';
-import { CoursesService } from '../services/courses.service';
+import { CategoryPipe } from '../../../shared/pipes/category.pipe';
+import { Course } from '../../model/course';
 
 @Component({
   selector: 'app-table-courses',
@@ -44,11 +43,11 @@ export class TableCoursesComponent implements OnInit {
   @Input() courses!: Course[];
   coursesDataSource!: MatTableDataSource<Course>;
 
-  constructor(
-    private coursesService: CoursesService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  @Output() add = new EventEmitter(false);
+  @Output() edit = new EventEmitter(false);
+  @Output() delete = new EventEmitter(false);
+
+  constructor() {}
 
   ngOnInit(): void {
     this.coursesDataSource = new MatTableDataSource(this.courses);
@@ -65,6 +64,14 @@ export class TableCoursesComponent implements OnInit {
   }
 
   onAdd() {
-    this.router.navigate(['new'], { relativeTo: this.route });
+    this.add.emit(true);
+  }
+
+  onEdit(course: Course) {
+    this.edit.emit(course);
+  }
+
+  onDelete(course: Course) {
+    this.delete.emit(course);
   }
 }
