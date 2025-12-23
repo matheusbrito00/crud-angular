@@ -1,6 +1,11 @@
-import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule, Location } from '@angular/common';
+import { Component, OnInit, signal } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,6 +20,7 @@ import { CoursesService } from '../../services/courses.service';
 @Component({
   selector: 'app-course-form',
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -29,6 +35,7 @@ import { CoursesService } from '../../services/courses.service';
 })
 export class CourseFormComponent implements OnInit {
   form!: FormGroup;
+  readonly value = signal('');
 
   constructor(
     private fb: FormBuilder,
@@ -43,24 +50,61 @@ export class CourseFormComponent implements OnInit {
 
     this.form = this.fb.group({
       _id: [_id],
-      name: [name],
-      category: [category],
+      name: [
+        name,
+        [
+          Validators.required,
+          Validators.minLength(4),
+          Validators.maxLength(100),
+        ],
+      ],
+      category: [category, [Validators.required]],
     });
   }
 
   onSubmit() {
-    this.courseService.save(this.form.value).subscribe(
-      (result) => {
-        this.onSuccess();
-      },
-      (error) => {
-        this.onError();
-      }
-    );
+    if (this.form.valid) {
+      this.courseService.save(this.form.value).subscribe(
+        (result) => {
+          this.onSuccess();
+        },
+        (error) => {
+          this.onError();
+        }
+      );
+    }
   }
 
   onCancel() {
     this.location.back();
+  }
+
+  getErrorMessage(fieldName: string): string {
+    const field = this.form.get(fieldName);
+
+    if (field?.hasError('required')) {
+      return 'Campo obrigatório';
+    }
+
+    if (field?.hasError('minlength')) {
+      const requiredLength = field.errors
+        ? field.errors['minlength']['requiredLength']
+        : 5;
+      return `Nome deve ter no mínimo ${requiredLength} caracteres`;
+    }
+
+    if (field?.hasError('maxlength')) {
+      const requiredLength = field.errors
+        ? field.errors['maxlength']['requiredLength']
+        : 5;
+      return `Nome deve ter no máximo ${requiredLength} caracteres`;
+    }
+
+    return 'Campo inválido';
+  }
+
+  protected onInput(event: Event) {
+    this.value.set((event.target as HTMLInputElement).value);
   }
 
   private onSuccess() {
